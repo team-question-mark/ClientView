@@ -1,7 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
-import NavBarBoot from '../components/NavBarBoot';
+import Header from '../components/Header';
+import { Button } from 'bootstrap';
+
 
 function Main(){
 
@@ -17,14 +19,124 @@ function Main(){
 
     return(
         <>
-            <div>
-                <NavBarBoot></NavBarBoot>
-                <h2>메인임</h2>
-                <button onClick={goRoom}>룸페이지로 이동</button>
-                <button onClick={goHelp}>도움페이지로 이동</button>
-                <button onClick={goSettings}>설정페이지로 이동</button>
-            </div>
+        <Header/>
+            <Container>
+                <MainBox>
+                    <CreateBox1>
+                        <CreateBox2>
+                            <img width="256" height="256" src="https://img.icons8.com/windows/256/home.png" alt="home"/>
+                        </CreateBox2>
+                        <CreateBox3>
+                            <MainButton>방 생성</MainButton> 
+                        </CreateBox3>
+                    </CreateBox1>
+                    <ParticipateBox1>
+                        <ParticipateBox2>
+                            <img width="256" height="225" src="https://icon-library.com/images/enter-icon-png/enter-icon-png-4.jpg"/>
+                        </ParticipateBox2>
+                        <ParticipateBox3>
+                            <MainButton>방 참가</MainButton>    
+                        </ParticipateBox3>
+                    </ParticipateBox1>
+                </MainBox>
+            </Container>
         </>
     )
 }
 export default Main;
+
+
+let Container = styled.div`  //가장 큰거 담는 부분
+    display: flex;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80vh;
+`
+
+let MainBox = styled.div`  //메인박스
+    display: flex;
+    width: 70%;
+    height: 80%;
+    background-color: white;
+`
+
+let CreateBox1 = styled.div` //방생성 박스1
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+`
+let CreateBox2 = styled.div` //방생성 박스2
+    display: flex;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+    padding-top: 10px;
+
+`
+let CreateBox3 = styled.div` //방생성 박스3
+    display: flex;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+`
+
+let ParticipateBox1 = styled.div` //방참가 박스1
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+`
+let ParticipateBox2 = styled.div` //방참가 박스2
+    display: flex;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+    padding-top: 10px;
+`
+let ParticipateBox3 = styled.div` //방참가 박스3
+    display: flex;
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-size: 75px;
+    margin-left: 55px;
+`
+
+let MainButton = styled.button` //버튼 형태
+
+    border-width: 0;
+    border-radius: 18px;
+    background-color: white;
+    padding: 10px 30px;
+    font-size: 55px;
+    font-weight: bold;
+
+    &:hover {
+    background: black;
+    color: white;
+    transition: 0.25s;
+    }
+    cursor: pointer;
+`
