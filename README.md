@@ -1,5 +1,3 @@
-# npm install 필수 packgage.json은 올리지 말것
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
