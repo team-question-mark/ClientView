@@ -1,4 +1,7 @@
+Node_modules는 push 및 commit 금지
+파일 받은 후 npm install 필수
 
+# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
