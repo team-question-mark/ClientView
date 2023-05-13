@@ -5,37 +5,38 @@ import Header from '../components/Header';
 import { Button } from 'bootstrap';
 
 
-function Main(){
+function Main() {
 
-    const goRoom = () =>{
+    const goRoom = () => {
         window.location.href = "/pages/Room";
     }
-    const goHelp = () =>{
+    const goHelp = () => {
         window.location.href = "/pages/Help";
     }
-    const goSettings = () =>{
+    const goSettings = () => {
         window.location.href = "/pages/Settings";
     }
 
-    return(
+    return (
         <>
-        <Header/>
+            <Header />
             <Container>
                 <MainBox>
                     <CreateBox1>
                         <CreateBox2>
-                            <img width="256" height="256" src="https://img.icons8.com/windows/256/home.png" alt="home"/>
+                            <img width="256" height="256" src="https://img.icons8.com/windows/256/home.png" alt="home" />
+                            {/* <img src={process.env.PUBLIC_URL + '/Images/Home.png'} alt='Home'/> */}
                         </CreateBox2>
                         <CreateBox3>
-                            <MainButton>방 생성</MainButton> 
+                            <MainButton>방 생성</MainButton>
                         </CreateBox3>
                     </CreateBox1>
                     <ParticipateBox1>
                         <ParticipateBox2>
-                            <img width="256" height="225" src="https://icon-library.com/images/enter-icon-png/enter-icon-png-4.jpg"/>
+                            <img width="256" height="225" src="https://icon-library.com/images/enter-icon-png/enter-icon-png-4.jpg" />
                         </ParticipateBox2>
                         <ParticipateBox3>
-                            <MainButton>방 참가</MainButton>    
+                            <MainButton>방 참가</MainButton>
                         </ParticipateBox3>
                     </ParticipateBox1>
                 </MainBox>
@@ -53,6 +54,8 @@ let Container = styled.div`  //가장 큰거 담는 부분
     justify-content: center;
     width: 100%;
     height: 80vh;
+    min-width: 1240px;
+    min-height: 600px;
 `
 
 let MainBox = styled.div`  //메인박스

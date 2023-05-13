@@ -7,34 +7,42 @@ function Header() {
 
 
 
-  const goHome = () =>{
+  const goHome = () => {
     window.location.href = "/";
   }
-  const goHelp = () =>{
-    window.location.href = '/pages/Help.js';
+  const goHelp = () => {
+    window.location.href = '/pages/Help';
   }
-  const goSttings = () =>{
-    window.location.href = '/pages/Settings.js';
+  const goSttings = () => {
+    window.location.href = '/pages/Settings';
   }
-  const goInformation = () =>{
-    window.location.href = '/pages/Informaiton.js';
+  const goInformation = () => {
+    window.location.href = '/pages/Informaiton';
   }
 
+  //대화방이라 지워야함
+  const goRoom = () => {
+    window.location.href = '/pages/Room';
+  }
 
 
 
   return (
-    <Container>
-      <TEXT onClick={goHome}>팀 물음표</TEXT>
-      <HeaderUl>
-        <HeaderLi onClick={goHome}>Home</HeaderLi>
-        <HeaderLi onClick={goHelp} >Help</HeaderLi>
-        <HeaderLi onClick={goSttings}>Settings</HeaderLi>
-        <HeaderLi onClick={goInformation}>Informaiton</HeaderLi>
-      </HeaderUl>
-      
-      
-    </Container>
+    <div>
+      <Container>
+        <TEXT onClick={goHome}>팀 물음표</TEXT>
+        <HeaderUl>
+          <HeaderLi onClick={goHome}>Home</HeaderLi>
+          <HeaderLi onClick={goHelp} >Help</HeaderLi>
+          <HeaderLi onClick={goSttings}>Settings</HeaderLi>
+          <HeaderLi onClick={goInformation}>Information</HeaderLi>
+
+          <HeaderLi onClick={goRoom}>대화방확인</HeaderLi>
+        </HeaderUl>
+
+
+      </Container>
+    </div>
   );
 }
 
@@ -42,10 +50,11 @@ export default Header;
 
 
 let Container = styled.nav`  //가장 큰거 담는 부분
-  
   display: flex;
   height: 80px;
-  width: 100%;
+  width: 100;
+  //margin-top: 10px;
+  min-width: 1240px;
   background: white;
   align-items: center;
   //justify-content: space-between;
@@ -53,6 +62,7 @@ let Container = styled.nav`  //가장 큰거 담는 부분
   flex-wrap: wrap;
 `
 let HeaderUl = styled.div`  //메뉴 영역
+
   margin-left: 10%;
   display: flex;
   flex-wrap: wrap;
