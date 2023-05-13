@@ -28,7 +28,7 @@ function Header() {
 
 
   return (
-    <div>
+    <div style={{position:"sticky",top:0}}>
       <Container>
         <TEXT onClick={goHome}>팀 물음표</TEXT>
         <HeaderUl>
@@ -39,9 +39,7 @@ function Header() {
 
           <HeaderLi onClick={goRoom}>대화방확인</HeaderLi>
         </HeaderUl>
-
-
-      </Container>
+      </Container>  
     </div>
   );
 }

@@ -4,7 +4,6 @@ import styled from 'styled-components'; // react에 css 바로 사용 라이브�
 import Header from '../components/Header';
 import { Button } from 'bootstrap';
 
-
 function Main() {
 
     const goRoom = () => {
