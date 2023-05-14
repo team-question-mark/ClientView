@@ -1,11 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
-
+import Modal from '../components/Modal';
 
 
 function Room() {
+
+
+    const handleHangUp = () => {
+        // Show the modal
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        // Hide the modal
+        setIsModalOpen(false);
+    };
+
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+
+
     return (
         <div style={{width:"100", height:"100vh"}}>
             <Header />

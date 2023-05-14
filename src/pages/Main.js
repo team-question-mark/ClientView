@@ -1,24 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
-import { Button } from 'bootstrap';
+import Modal from '../components/Modal';
+
 
 function Main() {
 
-    const goRoom = () => {
-        window.location.href = "/pages/Room";
-    }
-    const goHelp = () => {
-        window.location.href = "/pages/Help";
-    }
-    const goSettings = () => {
-        window.location.href = "/pages/Settings";
-    }
+    //모달창 켜고 닫기
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleModalOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    // 방이동 코드
+    // const goRoom = () => { 
+    //     window.location.href = "/pages/Room";
+    // }
+    // const goHelp = () => {
+    //     window.location.href = "/pages/Help";
+    // }
+    // const goSettings = () => {
+    //     window.location.href = "/pages/Settings";
+    // }
 
     return (
         <>
             <Header />
+            
             <Container>
                 <MainBox>
                     <CreateBox1>
@@ -27,7 +41,9 @@ function Main() {
                             {/* <img src={process.env.PUBLIC_URL + '/Images/Home.png'} alt='Home'/> */}
                         </CreateBox2>
                         <CreateBox3>
-                            <MainButton>방 생성</MainButton>
+                            <Modal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
+                                뱅을 생성할꺼냐?
+                            </Modal>
                         </CreateBox3>
                     </CreateBox1>
                     <ParticipateBox1>
@@ -35,7 +51,10 @@ function Main() {
                             <img width="256" height="225" src="https://icon-library.com/images/enter-icon-png/enter-icon-png-4.jpg" />
                         </ParticipateBox2>
                         <ParticipateBox3>
-                            <MainButton>방 참가</MainButton>
+                            {/* <MainButton>방 참가</MainButton> */}
+                            <Modal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
+                                뱅 코드를 입력해라
+                            </Modal>
                         </ParticipateBox3>
                     </ParticipateBox1>
                 </MainBox>
