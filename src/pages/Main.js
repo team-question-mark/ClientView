@@ -54,6 +54,9 @@ function Main() {
                             {/* <MainButton>방 참가</MainButton> */}
                             <Modal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
                                 뱅 코드를 입력해라
+                                <input style={{display:"block", width:"100%",marginTop:"20px",height:"25px",borderWidth:"2px",borderRadius:"5px"}} >
+
+                                </input>
                             </Modal>
                         </ParticipateBox3>
                     </ParticipateBox1>

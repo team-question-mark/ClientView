@@ -54,6 +54,8 @@ let Container = styled.nav`  //가장 큰거 담는 부분
   //justify-content: space-between;
   padding: 0 50px 0 100px;
   flex-wrap: wrap;
+  pointer-events: auto;
+  z-index: 9999;
 `
 let HeaderUl = styled.div`  //메뉴 영역
 

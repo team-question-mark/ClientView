@@ -26,6 +26,7 @@ function Help() {
 
     let options = { //풀페이지 스크롤 옵션 설정
         anchors: ['sectionOne', 'sectionTwo'],
+        normalScrollElements: '.header-container',
     };
 
 
