@@ -1,14 +1,9 @@
 import React from 'react';
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
 import { SectionsContainer, Section } from 'react-fullpage'; //풀페이지 스크롤 라이브러리
 import HelpModal from '../components/HelpModal';
-
-
-//뒤로가기 이미지
-{/* <img src="data:image/svg+xml;base64,PHN2ZyBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjIiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMjIgMTIuMDAyYzAtNS41MTctNC40OC05Ljk5Ny05Ljk5OC05Ljk5Ny01LjUxNyAwLTkuOTk3IDQuNDgtOS45OTcgOS45OTcgMCA1LjUxOCA0LjQ4IDkuOTk4IDkuOTk3IDkuOTk4IDUuNTE4IDAgOS45OTgtNC40OCA5Ljk5OC05Ljk5OHptLTEuNSAwYzAgNC42OS0zLjgwOCA4LjQ5OC04LjQ5OCA4LjQ5OHMtOC40OTctMy44MDgtOC40OTctOC40OTggMy44MDctOC40OTcgOC40OTctOC40OTcgOC40OTggMy44MDcgOC40OTggOC40OTd6bS02LjcxMS00Ljg0NWMuMTQxLS4xMDguMy0uMTU3LjQ1Ni0uMTU3LjM4OSAwIC43NTUuMzA2Ljc1NS43NDl2OC41MDFjMCAuNDQ1LS4zNjcuNzUtLjc1NS43NS0uMTU3IDAtLjMxNi0uMDUtLjQ1Ny0uMTU5LTEuNTU0LTEuMjAzLTQuMTk5LTMuMjUyLTUuNDk4LTQuMjU4LS4xODQtLjE0Mi0uMjktLjM2LS4yOS0uNTkyIDAtLjIzLjEwNy0uNDQ5LjI5MS0uNTkxem0tLjI4OSA3LjU2NHYtNS40NDZsLTMuNTIyIDIuNzE4eiIgZmlsbC1ydWxlPSJub256ZXJvIi8+PC9zdmc+"></img> */ }
 
 
 
@@ -25,8 +20,8 @@ function Help() {
     };
 
     let options = { //풀페이지 스크롤 옵션 설정
-        anchors: ['sectionOne', 'sectionTwo'],
-        normalScrollElements: '.header-container',
+        anchors: ['sectionOne', 'sectionTwo','sectionThree'],
+        //normalScrollElements: '.header-container',
     };
 
 
@@ -72,6 +67,14 @@ function Help() {
         <>
             <Header />
             <SectionsContainer {...options}>
+            <Section>
+                    <Container1>
+                        <div style={{fontSize:"55px"}}>
+                            <h2>버튼들과 상호작용하여 연습해보세요</h2>
+                        </div>
+                    </Container1>
+                </Section>
+
                 <Section>
                     <Container1>
                         <MainBox1>
@@ -92,6 +95,9 @@ function Help() {
                                 <ParticipateBox3>
                                     <HelpModal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
                                         뱅 코드를 입력해라
+                                        <input style={{display:"block", width:"100%",marginTop:"20px",height:"25px",borderWidth:"2px",borderRadius:"5px"}} >
+
+                                        </input>
                                     </HelpModal>
                                 </ParticipateBox3>
                             </ParticipateBox1>
