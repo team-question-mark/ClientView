@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
 import { SectionsContainer, Section } from 'react-fullpage'; //풀페이지 스크롤 라이브러리
+import HelpModal from '../components/HelpModal';
 
 
 //뒤로가기 이미지
@@ -12,20 +13,59 @@ import { SectionsContainer, Section } from 'react-fullpage'; //풀페이지 스�
 
 
 function Help() {
-
+    //페이지 스크롤 함수
     const [showTooltip, setShowTooltip] = useState(false);
-  
+
     const handleMouseEnter = () => {
-      setShowTooltip(true);
+        setShowTooltip(true);
     };
-    
+
     const handleMouseLeave = () => {
-      setShowTooltip(false);
+        setShowTooltip(false);
     };
 
     let options = { //풀페이지 스크롤 옵션 설정
         anchors: ['sectionOne', 'sectionTwo'],
     };
+
+
+    //모달창 켜고 닫기
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleModalOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+
+
+
+
+    //통화 종료 함수
+    const showConfirm = () => {
+        if (window.confirm('통화를 종료하시겠습니까?')) {
+            alert('통화 종료');
+        } else {
+            alert('통화유지');
+        }
+    }
+    //여기까지
+
+    //말하기 버튼 함수
+    const [isButtonPressed, setIsButtonPressed] = useState(false);
+
+    const handleMouseDown = () => {
+        setIsButtonPressed(true);
+    }
+
+    const handleMouseUp = () => {
+        setIsButtonPressed(false);
+    }
+    //여기까지
+
 
     return (
         <>
@@ -39,7 +79,9 @@ function Help() {
                                     <img width="256" height="256" src="https://img.icons8.com/windows/256/home.png" alt="home" />
                                 </CreateBox2>
                                 <CreateBox3>
-                                    <MainButton>방 생성</MainButton>
+                                    <HelpModal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
+                                        뱅을 생성할꺼냐?
+                                    </HelpModal>
                                 </CreateBox3>
                             </CreateBox1>
                             <ParticipateBox1>
@@ -47,7 +89,9 @@ function Help() {
                                     <img width="256" height="225" src="https://icon-library.com/images/enter-icon-png/enter-icon-png-4.jpg" />
                                 </ParticipateBox2>
                                 <ParticipateBox3>
-                                    <MainButton>방 참가</MainButton>
+                                    <HelpModal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
+                                        뱅 코드를 입력해라
+                                    </HelpModal>
                                 </ParticipateBox3>
                             </ParticipateBox1>
                         </MainBox1>
@@ -56,7 +100,7 @@ function Help() {
                 <Section>
                     <Container2>
                         <HangUpBox1>
-                            <HangUpBox2>
+                            <HangUpBox2 onClick={showConfirm}>
                                 <div style={{ borderStyle: "solid", borderWidth: "5px", borderRadius: "100px", padding: "15px" }}>
                                     <img src={process.env.PUBLIC_URL + '/Images/HangUp.png'} alt='HangUp' width={80} />
                                 </div>
@@ -92,11 +136,11 @@ function Help() {
                             </DevideBox2>
                         </MainBox2>
                         <TalkBox1>
-                            <TalkBox2>
+                            <TalkBox2 onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
                                 {/* <div style={{borderStyle:"solid", borderWidth:"6px",borderRadius:"100px" , padding:"10px",width:"40%"}}> */}
                                 <img src={process.env.PUBLIC_URL + '/Images/Mic3.png'} alt='Mic' width={120} />
                                 {/* </div> */}
-                                눌러서 말하기
+                                {isButtonPressed ? '말하는 중' : '눌러서 말하기'}
                             </TalkBox2>
                         </TalkBox1>
                     </Container2>

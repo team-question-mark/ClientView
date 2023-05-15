@@ -41,7 +41,7 @@ function Main() {
                             {/* <img src={process.env.PUBLIC_URL + '/Images/Home.png'} alt='Home'/> */}
                         </CreateBox2>
                         <CreateBox3>
-                            <Modal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
+                            <Modal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
                                 뱅을 생성할꺼냐?
                             </Modal>
                         </CreateBox3>
@@ -52,7 +52,7 @@ function Main() {
                         </ParticipateBox2>
                         <ParticipateBox3>
                             {/* <MainButton>방 참가</MainButton> */}
-                            <Modal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
+                            <Modal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
                                 뱅 코드를 입력해라
                             </Modal>
                         </ParticipateBox3>

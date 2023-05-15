@@ -8,26 +8,35 @@ import Modal from '../components/Modal';
 function Room() {
 
 
-    const handleHangUp = () => {
-        // Show the modal
-        setIsModalOpen(true);
-    };
 
-    const handleCloseModal = () => {
-        // Hide the modal
-        setIsModalOpen(false);
-    };
+    //통화 종료 함수
+    const showConfirm = () => {
+        if (window.confirm('통화를 종료하시겠습니까?')) {
+            alert('통화 종료');
+        } else {
+            alert('통화유지');
+        }
+    }
+    //여기까지
 
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    //말하기 버튼 함수
+    const [isButtonPressed, setIsButtonPressed] = useState(false);
 
+    const handleMouseDown = () => {
+        setIsButtonPressed(true);
+    }
 
+    const handleMouseUp = () => {
+        setIsButtonPressed(false);
+    }
+    //여기까지
 
     return (
         <div style={{width:"100", height:"100vh"}}>
             <Header />
             <Container>
                 <HangUpBox1>
-                    <HangUpBox2>
+                    <HangUpBox2 onClick={showConfirm}>
                         <div style={{ borderStyle: "solid", borderWidth: "5px", borderRadius: "100px", padding: "15px" }}>
                             <img src={process.env.PUBLIC_URL + '/Images/HangUp.png'} alt='HangUp' width={80} />
                         </div>
@@ -64,11 +73,11 @@ function Room() {
 
                 </MainBox>
                 <TalkBox1>
-                    <TalkBox2>
+                    <TalkBox2 onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
                         {/* <div style={{borderStyle:"solid", borderWidth:"6px",borderRadius:"100px" , padding:"10px",width:"40%"}}> */}
                         <img src={process.env.PUBLIC_URL + '/Images/Mic3.png'} alt='Mic' width={120} />
                         {/* </div> */}
-                        눌러서 말하기
+                        {isButtonPressed ? '말하는 중' : '눌러서 말하기'}
                     </TalkBox2>
                 </TalkBox1>
 

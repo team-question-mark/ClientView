@@ -13,9 +13,6 @@ function Header() {
   const goHelp = () => {
     window.location.href = '/pages/Help';
   }
-  const goSttings = () => {
-    window.location.href = '/pages/Settings';
-  }
   const goInformation = () => {
     window.location.href = '/pages/Informaiton';
   }
@@ -34,7 +31,6 @@ function Header() {
         <HeaderUl>
           <HeaderLi onClick={goHome}>Home</HeaderLi>
           <HeaderLi onClick={goHelp} >Help</HeaderLi>
-          <HeaderLi onClick={goSttings}>Settings</HeaderLi>
           <HeaderLi onClick={goInformation}>Information</HeaderLi>
 
           <HeaderLi onClick={goRoom}>대화방확인</HeaderLi>
