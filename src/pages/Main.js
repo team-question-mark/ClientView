@@ -42,7 +42,8 @@ function Main() {
                         </CreateBox2>
                         <CreateBox3>
                             <Modal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
-                                뱅을 생성할꺼냐?
+                                   뱅을 생성할꺼냐?
+                                <OpenButton>예</OpenButton> <OpenButton>아니오</OpenButton>
                             </Modal>
                         </CreateBox3>
                     </CreateBox1>
@@ -148,19 +149,38 @@ let ParticipateBox3 = styled.div` //방참가 박스3
     margin-left: 55px;
 `
 
-let MainButton = styled.button` //버튼 형태
+// let MainButton = styled.button` //버튼 형태
 
-    border-width: 0;
-    border-radius: 18px;
-    background-color: white;
-    padding: 10px 30px;
-    font-size: 55px;
-    font-weight: bold;
+//     border-width: 0;
+//     border-radius: 18px;
+//     background-color: white;
+//     padding: 10px 30px;
+//     font-size: 55px;
+//     font-weight: bold;
 
-    &:hover {
+//     &:hover {
+//     background: black;
+//     color: white;
+//     transition: 0.25s;
+//     }
+//     cursor: pointer;
+// `
+const OpenButton = styled.div` //방생성할거냐 버튼
+  margin: 5px;
+  color: black;
+  align-items: center;
+  padding: 8px 15px;
+  border-radius: 15px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 650;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
     background: black;
     color: white;
     transition: 0.25s;
-    }
-    cursor: pointer;
-`
+  }
+`;

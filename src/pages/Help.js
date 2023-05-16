@@ -85,6 +85,7 @@ function Help() {
                                 <CreateBox3>
                                     <HelpModal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
                                         뱅을 생성할꺼냐?
+                                        <OpenButton>예</OpenButton> <OpenButton>아니오</OpenButton>
                                     </HelpModal>
                                 </CreateBox3>
                             </CreateBox1>
@@ -406,3 +407,24 @@ let TalkBox2 = styled.div` //말하기 버튼이 들어갈 박스2
     background-color: white;
     cursor: pointer;
 `
+
+
+const OpenButton = styled.div` //방생성할거냐 버튼
+  margin: 5px;
+  color: black;
+  align-items: center;
+  padding: 8px 15px;
+  border-radius: 15px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 650;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: black;
+    color: white;
+    transition: 0.25s;
+  }
+`;
