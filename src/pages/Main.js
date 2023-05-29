@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
 import Modal from '../components/Modal';
+import axios from 'axios';
 
 
 function Main() {
+
+
+
+    const navigate = useNavigate();
+
+    const [inputValue, setInputValue] = useState(null);
 
     //모달창 켜고 닫기
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,10 +36,93 @@ function Main() {
     //     window.location.href = "/pages/Settings";
     // }
 
+
+
+
+
+    // Video Call
+
+    const [roomId, setRoomId] = useState(null);
+
+    useEffect(() => {
+        if(roomId === null){
+            return;
+        }
+        goRoom();
+    }, [roomId])
+
+    // roomId
+    // let roomId = null;
+
+    const handleInputValue = (event) => {
+        setInputValue(event.target.value);
+    }
+
+    const goRoom = () => {
+        navigate('/pages/Room', { state: { roomId: roomId } })
+    }
+
+    // 방 생성
+    const createRoom = () => {
+        // 방 생성 api   /room/create
+
+        // 연결  => roomId와 함께 화상통화 페이지로 이동
+
+    }
+
+
+    // 방 입장
+    const enterRoom = (roomId) => {
+        // 방 확인 api   /room/check
+
+        // 연결  => roomId와 함께 화상통화 페이지로 이동
+
+    }
+
+
+    // ======== Test
+    const serverUrl = process.env.REACT_APP_ROOM_SERVER_URL;
+    console.log(serverUrl);
+    console.log(process.env.REACT_APP_TEST);
+
+
+    const test_createRoom = () => {
+        // 방 생성 api   /test/room/create
+        axios.get(serverUrl + '/test/room/create')
+            .then((result) => {
+                const jsonResult = JSON.stringify(result);
+                setRoomId(result.data.roomId);
+                console.log('roomId : ' + roomId);
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }
+
+    const test_enterRoom = () => {
+        // 방 확인 api   /test/room/check
+        axios.get(serverUrl + '/test/room/check', 
+            {params:{roomId: inputValue}})
+            .then((result) => {
+                console.log(result.data.isRoom);
+                if (!result.data.isRoom) {
+                    // window.alert('no!')
+                }else{
+                    setRoomId(inputValue);
+                    console.log(roomId);
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+    }
+
+
+
     return (
         <>
             <Header />
-            
+
             <Container>
                 <MainBox>
                     <CreateBox1>
@@ -42,8 +132,8 @@ function Main() {
                         </CreateBox2>
                         <CreateBox3>
                             <Modal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
-                                   뱅을 생성할꺼냐?
-                                <OpenButton>예</OpenButton> <OpenButton>아니오</OpenButton>
+                                뱅을 생성할꺼냐?
+                                <OpenButton onClick={test_createRoom}>예</OpenButton> <OpenButton>아니오</OpenButton>
                             </Modal>
                         </CreateBox3>
                     </CreateBox1>
@@ -55,9 +145,9 @@ function Main() {
                             {/* <MainButton>방 참가</MainButton> */}
                             <Modal buttonLabel="방 참가" isOpen={isModalOpen} handleClose={handleModalClose}>
                                 뱅 코드를 입력해라
-                                <input style={{display:"block", width:"100%",marginTop:"20px",height:"25px",borderWidth:"2px",borderRadius:"5px"}} >
-
-                                </input>
+                                <input style={{ display: "block", width: "100%", marginTop: "20px", height: "25px", borderWidth: "2px", borderRadius: "5px" }}
+                                    type='text' value={inputValue} onChange={handleInputValue}/>
+                                <button onClick={test_enterRoom} >입장</button>
                             </Modal>
                         </ParticipateBox3>
                     </ParticipateBox1>

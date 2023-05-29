@@ -1,26 +1,20 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components'; // react에 css 바로 사용 라이브러리
 import Header from '../components/Header';
 import Modal from '../components/Modal';
+import VideoCall from '../components/VideoCall';
+
+
 
 
 function Room() {
 
-    //여기부터 화상통화
+    const location = useLocation();
+
+    const roomId = location.state.roomId;
+    console.log('roomId는 '+roomId);
     
-
-
-    
-
-
-
-
-
-
-    //===================================================================
-
-
 
     //통화 종료 함수
     const showConfirm = () => {
@@ -45,7 +39,7 @@ function Room() {
     //여기까지
 
     return (
-        <div style={{width:"100", height:"100vh"}}>
+        <div style={{ width: "100", height: "100vh" }}>
             <Header />
             <Container>
                 <HangUpBox1>
@@ -58,16 +52,7 @@ function Room() {
                 </HangUpBox1>
                 <MainBox>
                     <DevideBox1>
-                        <ConverBox1>
-                            <img
-                                style={{ width: "100%", height: "100%" }}
-                                src='https://image.fmkorea.com/files/attach/new2/20220825/486616/2407582322/4958574293/a1c34755168aa750f6c27544cc4a32ab.png' />
-                        </ConverBox1>
-                        <ConverBox2>
-                            <img
-                                style={{ width: "100%", height: "100%" }}
-                                src='https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/4arX/image/cr9XuEQ_LA3Asy-updakmyVdwv0.jpg' />
-                        </ConverBox2>
+                        <VideoCall roomId={roomId}  />
                     </DevideBox1>
                     <DevideBox2>
                         <CodeBox>
