@@ -48,6 +48,7 @@ function Main() {
         if(roomId === null){
             return;
         }
+        console.log('go room... room id is '+ roomId);
         goRoom();
     }, [roomId])
 
@@ -82,8 +83,8 @@ function Main() {
 
     // ======== Test
     const serverUrl = process.env.REACT_APP_ROOM_SERVER_URL;
-    console.log(serverUrl);
-    console.log(process.env.REACT_APP_TEST);
+    // console.log(serverUrl);
+    // console.log(process.env.REACT_APP_TEST);
 
 
     const test_createRoom = () => {
@@ -92,7 +93,7 @@ function Main() {
             .then((result) => {
                 const jsonResult = JSON.stringify(result);
                 setRoomId(result.data.roomId);
-                console.log('roomId : ' + roomId);
+                // console.log('roomId : ' + roomId);
             })
             .catch((error) => {
                 console.error(error)
@@ -104,12 +105,12 @@ function Main() {
         axios.get(serverUrl + '/test/room/check', 
             {params:{roomId: inputValue}})
             .then((result) => {
-                console.log(result.data.isRoom);
+                // console.log(result.data.isRoom);
                 if (!result.data.isRoom) {
                     // window.alert('no!')
                 }else{
                     setRoomId(inputValue);
-                    console.log(roomId);
+                    // console.log(roomId);
                 }
             })
             .catch((error) => {

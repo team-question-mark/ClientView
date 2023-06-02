@@ -1,61 +1,86 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 
-
-
+// Signalling Server url
+const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
 
 function VideoCall(props) {
 
-    // let socket = null;
-
-    const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
-    console.log('url is : ' + url);
-
-    const [socket, setSocket] = useState(null);
-
     const roomId = props.roomId;
 
-    console.log('roomID is ' + roomId);
+    // STUN/TURN Server Config
+    const rtcConfig = {
+        'iceServers': [{
+            'urls': process.env.REACT_APP_STUN_SERVER_URL  // STUN 서버 URL
+        },
+        {
+            'urls': process.env.REACT_APP_TURN_SERVER_URL,  // TURN 서버 URL
+            'username': process.env.REACT_APP_TURN_SERVER_USER_NAME,  // TURN 서버 인증을 위한 사용자 이름
+            'credential': process.env.REACT_APP_TURN_SERVER_CREDENTIAL  // TURN 서버 인증을 위한 패스워드
+        }]
+    };
 
-    //여기부터 화상통화
+    const [socket, setSocket] = useState(null);
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [peerConnection, setPeerConnection] = useState(null);
-    const [isMuted, setIsMuted] = useState(false);
-
-    // const navigate = useNavigate();
+    // const [isMuted, setIsMuted] = useState(false);
 
 
-
-    // 미디어 스트림 가져오기
+    // get Local Media Stream  &  connect Socket  &  WebRTC Config
     useEffect(() => {
+
+        // 로그 확인
+        console.log('url is : ' + url);
+        console.log('roomID is ' + roomId);
+
+
+        // get Local Media Stream
         const constraints = { audio: true, video: true };
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
                 setLocalStream(stream);
+                // setSocket(io(url));
+                // setPeerConnection(new RTCPeerConnection(rtcConfig));
             })
             .catch((error) => {
                 console.error(error);
             });
+
+        // connect Socket
         setSocket(io(url));
-        // socket = io(url);
+        
+        // WebRTC Config
+        setPeerConnection(new RTCPeerConnection(rtcConfig));
+        
+        // unmount
+        return () => {
+            handleHangUp();
+        }
     }, []);
 
 
+    // connect WebRTC
     useEffect(() => {
-        // socket.emit('join', roomId)
-        // console.log('localstream, join is sucessed')
-        if (socket === null) {
-            return; // 초기 렌더링 시에는 실행하지 않음
+        if (socket === null || localStream === null) {
+            return;
         }
 
+        // 로그 확인
+        console.log('stream is ' + localStream);
+        console.log('socket is ' + socket);
+        console.log('pc is '+ peerConnection);
+
+
+        // room 입장
         const joinRoom = (roomId) => {
             socket.emit('join', roomId);
             console.log('localstream, join is sucessed');
         }
-
         joinRoom(roomId);
+
+
+        // Socket Listener
 
         // 상대방이 소켓을 연결했을 때
         socket.on('start', () => {
@@ -76,79 +101,91 @@ function VideoCall(props) {
         socket.on('candidate', (candidate) => {
             handleCandidate(candidate);
         });
-    }, [socket]);
+
+    }, [socket, localStream]);
 
 
-    // 연결 관련
+    
+    // Handler
+
+    // 연결 시작
     const handleStart = () => {
-        // navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-
-        console.log('handelStart')
-        const pc = new RTCPeerConnection(null);
-
-        pc.onicecandidate = (event) => {
+        peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
-                socket.emit('candidate', event.candidate);
+                socket.emit('candidate', event.candidate, roomId);
             }
         };
 
-        pc.ontrack = (event) => {
+        peerConnection.ontrack = (event) => {
             setRemoteStream(event.streams[0]);
         };
 
         localStream.getTracks().forEach((track) => {
-            pc.addTrack(track, localStream);
+            peerConnection.addTrack(track, localStream);
         });
 
-        pc.createOffer()
+        peerConnection.createOffer()
             .then((offer) => {
-                pc.setLocalDescription(offer);
-                socket.emit('offer', offer);
+                peerConnection.setLocalDescription(offer);
+                socket.emit('offer', offer, roomId);
             })
             .catch((error) => {
                 console.error(error);
             });
-
-        setPeerConnection(pc);
     };
 
+    // 연결 해제
+    const handleHangUp = () => {
 
-    // offer
+        if (peerConnection) {
+            peerConnection.close();
+        }
+        if (socket) {
+            socket.disconnect(roomId);
+        }
+        // if(localStream){
+        //     localStream.
+        // }
+
+        setLocalStream(null);
+        setRemoteStream(null);
+        setSocket(null);
+        setPeerConnection(null);
+    };
+
+    // offer handler
     const handleOffer = (offer) => {
-        const pc = new RTCPeerConnection(null);
-
-        pc.onicecandidate = (event) => {
+        peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
-                socket.emit('candidate', event.candidate);
+                socket.emit('candidate', event.candidate, roomId);
             }
         };
 
-        pc.ontrack = (event) => {
+        peerConnection.ontrack = (event) => {
             setRemoteStream(event.streams[0]);
         };
 
-        pc.setRemoteDescription(new RTCSessionDescription(offer));
+        peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
 
-        pc.createAnswer()
+        peerConnection.createAnswer()
             .then((answer) => {
-                pc.setLocalDescription(answer);
-                socket.emit('answer', answer);
+                peerConnection.setLocalDescription(answer);
+                socket.emit('answer', answer,roomId);
             })
             .catch((error) => {
                 console.error(error);
             });
-
-        setPeerConnection(pc);
     };
 
-    // answer
+    // answer handler
     const handleAnswer = (answer) => {
         peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
     };
 
 
-    // candidate 교환
+    // candidate handler
     const handleCandidate = (candidate) => {
+        console.log('pc is ' + peerConnection);
         const iceCandidate = new RTCIceCandidate(candidate);
         peerConnection.addIceCandidate(iceCandidate)
             .catch((error) => {
@@ -156,36 +193,22 @@ function VideoCall(props) {
             });
     };
 
-    // 연결 해제 관련
-    const handleHangUp = () => {
-        setLocalStream(null);
-        setRemoteStream(null);
-
-        if (peerConnection) {
-            peerConnection.close();
-        }
-
-        socket.disconnect();
-    };
-
-
-    // 음소거 관련
-    const handleToggleMute = () => {
-        const audioTracks = localStream.getAudioTracks();
-        if (audioTracks.length === 0) {
-            return;
-        }
-
-        const track = audioTracks[0];
-        setIsMuted(!isMuted);
-        track.enabled = !isMuted;
-    };
 
 
 
 
 
+    // // 음소거 관련
+    // const handleToggleMute = () => {
+    //     const audioTracks = localStream.getAudioTracks();
+    //     if (audioTracks.length === 0) {
+    //         return;
+    //     }
 
+    //     const track = audioTracks[0];
+    //     setIsMuted(!isMuted);
+    //     track.enabled = !isMuted;
+    // };
 
 
 

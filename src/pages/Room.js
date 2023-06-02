@@ -4,7 +4,7 @@ import styled from 'styled-components'; // react에 css 바로 사용 라이브�
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import VideoCall from '../components/VideoCall';
-
+import ReactHookSTT from '../components/STT';
 
 
 
@@ -13,7 +13,11 @@ function Room() {
     const location = useLocation();
 
     const roomId = location.state.roomId;
-    console.log('roomId는 '+roomId);
+
+    
+    useEffect(()=> {
+        console.log('roomId는 '+roomId);
+    }, [])
     
 
     //통화 종료 함수
@@ -70,14 +74,17 @@ function Room() {
                     </DevideBox2>
 
                 </MainBox>
-                <TalkBox1>
-                    <TalkBox2 onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
+                {/* <TalkBox1> */}
+                    {/* <TalkBox2 onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}> */}
                         {/* <div style={{borderStyle:"solid", borderWidth:"6px",borderRadius:"100px" , padding:"10px",width:"40%"}}> */}
-                        <img src={process.env.PUBLIC_URL + '/Images/Mic3.png'} alt='Mic' width={120} />
+                        {/* <img src={process.env.PUBLIC_URL + '/Images/Mic3.png'} alt='Mic' width={120} /> */}
                         {/* </div> */}
-                        {isButtonPressed ? '말하는 중' : '눌러서 말하기'}
-                    </TalkBox2>
-                </TalkBox1>
+                        {/* {isButtonPressed ? '말하는 중' : '눌러서 말하기'} */}
+                    {/* </TalkBox2> */}
+                {/* </TalkBox1> */}
+                {/* <div>
+                    <ReactHookSTT />
+                </div> */}
 
 
             </Container>
