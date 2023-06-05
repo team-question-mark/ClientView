@@ -4,6 +4,7 @@ import styled from 'styled-components'; // react에 css 바로 사용 라이브�
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import VideoCall from '../components/VideoCall';
+import VideoCallTest2 from '../components/VideoCallTest2';
 import ReactHookSTT from '../components/STT';
 
 
@@ -56,7 +57,7 @@ function Room() {
                 </HangUpBox1>
                 <MainBox>
                     <DevideBox1>
-                        <VideoCall roomId={roomId}  />
+                        <VideoCallTest2 roomId={roomId}  />
                     </DevideBox1>
                     <DevideBox2>
                         <CodeBox>

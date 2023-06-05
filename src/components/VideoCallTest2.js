@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import io from 'socket.io-client';
 
 // Signalling Server url
@@ -28,10 +28,13 @@ function VideoCall(props) {
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [peerConnection, setPeerConnection] = useState(null);
+    const canvasRef = useRef(null);
+    const timerRef = useRef(null);
+    const countRef = useRef(0);
     // const [isMuted, setIsMuted] = useState(false);
     
 
-    // get Local Media Stream  &  connect Socket  &  WebRTC Config
+    // get Local Media Stream  &  connect Socket  &  WebRTC Config & connect KSLFLASK
     useEffect(() => {
 
         // 로그 확인
@@ -56,15 +59,17 @@ function VideoCall(props) {
         
         // WebRTC Config
         setPeerConnection(new RTCPeerConnection(rtcConfig));
-
+        
         // connect KSLFLASK
         setKslsocket(io(kslurl));
-        
+      
         // unmount
         return () => {
             handleHangUp();
         }
     }, []);
+   
+
 
 
     // connect WebRTC
@@ -109,13 +114,18 @@ function VideoCall(props) {
             handleCandidate(candidate);
         });
 
-         //플라스크와 연결되면 콘솔에 찍기
-         kslsocket.on('connect', () => {
-            console.log("FLASK Connected...!", kslsocket)
-        })
+        // //플라스크와 연결되면 콘솔에 찍기
+        // kslsocket.on('connect', () => {
+        //     console.log("FLASK Connected...!",)
+        // })
+
+     
 
 
     }, [socket, localStream, kslsocket]);
+
+
+
 
 
     
@@ -163,6 +173,7 @@ function VideoCall(props) {
         setLocalStream(null);
         setRemoteStream(null);
         setSocket(null);
+        setKslsocket(null);
         setPeerConnection(null);
     };
 
@@ -204,9 +215,64 @@ function VideoCall(props) {
             .catch((error) => {
                 console.error(error);
             });
+
+                    //플라스크와 연결되면 콘솔에 찍기
+        kslsocket.on('connect', () => {
+            console.log("FLASK Connected...!",)
+        })
+
     };
 
 
+    //FLASK에게 이미지 전송
+    useEffect(() => {
+// 
+        //console.log('이미지전송 useEffect 실행됨');
+        if (localStream && countRef.current < 5) {
+// 
+          timerRef.current = setInterval(() => {
+            sendFrame();
+            //console.log('sendFrame 함수 실행 완료'); -> 실행잘됨
+          }, 300);
+        }
+
+        //플라스크 result
+        if (kslsocket) {
+            kslsocket.on('result', (data) => {
+                console.log("result: ", data)
+            })
+        }
+        //플라스크 response back
+        if (kslsocket) {
+            kslsocket.on('response_back', (data) => {
+                console.log("response_back: ", data)
+            })
+        }
+        return () => {
+          clearInterval(timerRef.current);
+          
+        };
+      }, [kslsocket,localStream,timerRef]);
+
+      
+    
+      const sendFrame = () => {
+        const video = document.querySelector('video');
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+    
+        context.drawImage(video, 0, 0, width, height);
+        const imageData = canvas.toDataURL('image/jpeg', 0.5);
+    
+        kslsocket.emit('image', imageData);
+        // countRef.current++;
+    
+        // if (countRef.current >= 5) {
+        //   clearInterval(timerRef.current);
+        // }
+      };
 
 
 
@@ -256,6 +322,13 @@ function VideoCall(props) {
                 <button onClick={handleHangUp}>Hang Up</button>
                 {!localStream && <button onClick={handleStart}>Start</button>}
             </div> */}
+            <canvas
+                id="videoCanvas"
+                ref={canvasRef}
+                width={640}
+                height={480}
+                style={{ display: 'none' }}
+            />       
         </div>
     );
 };
