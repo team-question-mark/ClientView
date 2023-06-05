@@ -41,7 +41,7 @@ function Header() {
 
   // 대화방이라 지워야함
   const goRoom = () => {
-    window.location.href = '/pages/Room';
+    window.location.href = '/pages/RoomTEST';
   };
 
   return (

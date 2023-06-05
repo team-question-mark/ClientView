@@ -11,6 +11,7 @@ import {
 import Main from "./pages/Main.js";
 import Help from "./pages/Help.js";
 import Room from "./pages/Room.js";
+import RoomTEST from './pages/RoomTEST.js';
 import Informaiton from './pages/Information.js';
 
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Main/>}/>
           <Route path="/pages/Help" element={<Help/>}/>
           <Route path="/pages/Room" element={<Room/>}/>
+          <Route path="/pages/RoomTEST" element={<RoomTEST/>}/>
           <Route path="/pages/Informaiton" element={<Informaiton/>}/>
         </Routes>
       </Router>
