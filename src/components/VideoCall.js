@@ -10,7 +10,6 @@ const kslurl = "http://localhost:5000";
 function VideoCall(props) {
 
     const roomId = props.roomId;
-
     // STUN/TURN Server Config
     const rtcConfig = {
         'iceServers': [{
@@ -37,7 +36,6 @@ function VideoCall(props) {
         // 로그 확인
         console.log('url is : ' + url);
         console.log('roomID is ' + roomId);
-
 
         // get Local Media Stream
         const constraints = { audio: true, video: true };

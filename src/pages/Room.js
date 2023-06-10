@@ -14,10 +14,11 @@ function Room() {
     const location = useLocation();
 
     const roomId = location.state.roomId;
-
+    const signUser = location.state.signUser;
     
     useEffect(()=> {
         console.log('roomId는 '+roomId);
+        console.log('수화사용자 여부? '+signUser);
     }, [])
     
 
@@ -57,7 +58,7 @@ function Room() {
                 </HangUpBox1>
                 <MainBox>
                     <DevideBox1>
-                        <VideoCallTest2 roomId={roomId}  />
+                        <VideoCallTest2 roomId={roomId} signUser={signUser} />
                     </DevideBox1>
                     <DevideBox2>
                         <CodeBox>

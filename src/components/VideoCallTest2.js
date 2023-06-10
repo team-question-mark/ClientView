@@ -11,7 +11,7 @@ const kslurl = "http://127.0.0.1:5000";
 function VideoCall(props) {
 
     const roomId = props.roomId;
-
+    const signUser = props.signUser;
     // STUN/TURN Server Config
     const rtcConfig = {
         'iceServers': [{
@@ -41,7 +41,7 @@ function VideoCall(props) {
         // 로그 확인
         console.log('url is : ' + url);
         console.log('roomID is ' + roomId);
-
+        console.log('대화방에 sign user수화 여부 :' + signUser);
 
         // get Local Media Stream
         const constraints = { audio: true, video: true };
@@ -62,8 +62,10 @@ function VideoCall(props) {
         setPeerConnection(new RTCPeerConnection(rtcConfig));
         
         // connect KSLFLASK
+        if(signUser){
         setKslsocket(io(kslurl));
-      
+        }
+
         // unmount
         return () => {
             handleHangUp();
@@ -115,11 +117,13 @@ function VideoCall(props) {
             handleCandidate(candidate);
         });
 
+        if(signUser){
+        kslsocket.emit('connectKSL', "emit?");
         // //플라스크와 연결되면 콘솔에 찍기
-        // kslsocket.on('connect', () => {
-        //     console.log("FLASK Connected...!",)
-        // })
-
+        kslsocket.on('connectKSL', (data) => {
+            console.log('KSL SERVER CONNECTED!',data)
+        })
+        }
      
 
 
@@ -217,7 +221,7 @@ function VideoCall(props) {
                 console.error(error);
             });
 
-                    //플라스크와 연결되면 콘솔에 찍기
+        //플라스크와 연결되면 콘솔에 찍기
         kslsocket.on('connect', () => {
             console.log("FLASK Connected...!",)
         })
@@ -228,6 +232,9 @@ function VideoCall(props) {
     //FLASK에게 이미지 전송
     useEffect(() => {
 // 
+        if(kslsocket === null){
+            return
+        }
         //console.log('이미지전송 useEffect 실행됨');
         if (localStream && countRef.current < 5) {
 // 
@@ -323,13 +330,24 @@ function VideoCall(props) {
                 <button onClick={handleHangUp}>Hang Up</button>
                 {!localStream && <button onClick={handleStart}>Start</button>}
             </div> */}
-            <canvas
+
+
+
+            {/* 삼항연산자로 true일때만 쏴주기 */}
+            {signUser === true ? <canvas
                 id="videoCanvas"
                 ref={canvasRef}
                 width={640}
                 height={480}
                 style={{ display: 'none' }}
-            />       
+            /> : <div/>}
+            {/* <canvas
+                id="videoCanvas"
+                ref={canvasRef}
+                width={640}
+                height={480}
+                style={{ display: 'none' }}
+            />        */}
         </div>
     );
 };
