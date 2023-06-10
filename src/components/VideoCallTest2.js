@@ -3,7 +3,8 @@ import io from 'socket.io-client';
 
 // Signalling Server url
 const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
-const kslurl = "http://localhost:5000";
+// const kslurl = "http://localhost:5000";
+const kslurl = "http://127.0.0.1:5000";
 
 
 
@@ -243,11 +244,11 @@ function VideoCall(props) {
             })
         }
         //플라스크 response back
-        if (kslsocket) {
-            kslsocket.on('response_back', (data) => {
-                console.log("response_back: ", data)
-            })
-        }
+        // if (kslsocket) {
+        //     kslsocket.on('response_back', (data) => {
+        //         console.log("response_back: ", data)
+        //     })
+        // }
         return () => {
           clearInterval(timerRef.current);
           
