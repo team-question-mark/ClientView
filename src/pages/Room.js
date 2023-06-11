@@ -6,7 +6,7 @@ import Modal from '../components/Modal';
 import VideoCall from '../components/VideoCall';
 import VideoCallTest2 from '../components/VideoCallTest2';
 import ReactHookSTT from '../components/STT';
-
+import VideoPlayer from '../components/VideoPlayer';
 
 
 function Room() {
@@ -15,6 +15,13 @@ function Room() {
 
     const roomId = location.state.roomId;
     const signUser = location.state.signUser;
+
+    const [videoQueue, setVideoQueue] = useState([]);
+    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+    const handleVideoQueueUpdate = (videoQueue) => {
+        setVideoQueue(videoQueue);
+      };
     
     useEffect(()=> {
         console.log('roomId는 '+roomId);
@@ -59,6 +66,7 @@ function Room() {
                 <MainBox>
                     <DevideBox1>
                         <VideoCallTest2 roomId={roomId} signUser={signUser} />
+                        <VideoPlayer videoQueue={videoQueue} />
                     </DevideBox1>
                     <DevideBox2>
                         <CodeBox>
@@ -68,7 +76,7 @@ function Room() {
                         </CodeBox>
                         <TextBox>
 
-
+                        <ReactHookSTT onVideoQueueUpdate={handleVideoQueueUpdate} />
                             <div style={{ margin: "1px" }}>나 : &nbsp;&nbsp;나는 말한다</div>
                             <div style={{ margin: "1px" }}>상대 : &nbsp;&nbsp;너는 말한다</div>
 
@@ -76,19 +84,6 @@ function Room() {
                     </DevideBox2>
 
                 </MainBox>
-                {/* <TalkBox1> */}
-                    {/* <TalkBox2 onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}> */}
-                        {/* <div style={{borderStyle:"solid", borderWidth:"6px",borderRadius:"100px" , padding:"10px",width:"40%"}}> */}
-                        {/* <img src={process.env.PUBLIC_URL + '/Images/Mic3.png'} alt='Mic' width={120} /> */}
-                        {/* </div> */}
-                        {/* {isButtonPressed ? '말하는 중' : '눌러서 말하기'} */}
-                    {/* </TalkBox2> */}
-                {/* </TalkBox1> */}
-                {/* <div>
-                    <ReactHookSTT />
-                </div> */}
-
-
             </Container>
         </div>
     )
