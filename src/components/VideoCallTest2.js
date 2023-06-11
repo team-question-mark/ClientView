@@ -1,5 +1,8 @@
 import React, { useState, useEffect,useRef } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
+
+
 
 // Signalling Server url
 const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
@@ -29,6 +32,7 @@ function VideoCall(props) {
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [peerConnection, setPeerConnection] = useState(null);
+    const [wordarray, setWordArray] = useState(null); // 허브 서버로 보낼 state
     const canvasRef = useRef(null);
     const timerRef = useRef(null);
     const countRef = useRef(0);
@@ -65,6 +69,20 @@ function VideoCall(props) {
         if(signUser){
         setKslsocket(io(kslurl));
         }
+
+
+        //KSl Hub SERVER CONNECT CHECK
+        axios({
+            method: 'post',
+            url: 'http://3.34.107.64/test',
+            data: {"text": "connection"},
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        })  
+        .then((response) => { console.log("허브서버와 연결됨 아임 테스트: " + response.data); }) 
+        .catch(error => {console.error('에러 : '+error);});
 
         // unmount
         return () => {
@@ -117,17 +135,28 @@ function VideoCall(props) {
             handleCandidate(candidate);
         });
 
-        if(signUser){
-        kslsocket.emit('connectKSL', "emit?");
-        // //플라스크와 연결되면 콘솔에 찍기
-        kslsocket.on('connectKSL', (data) => {
-            console.log('KSL SERVER CONNECTED!',data)
-        })
-        }
+
+        //플라스크 result
+        // if (kslsocket) {
+            kslsocket.on('result', (data) => {
+                console.log("result: ", data)
+                //받은걸 바로 보내기
+                axios({
+                    method: 'post',
+                    url: 'http://3.34.107.64/server/ksl/from',
+                    data: {"ksl_recog_word_arr": data},
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })  
+                .then((response) => { console.log(response.data); }) 
+                .catch(error => {console.error('ksl 에러 : '+error);});
+            })
      
 
 
-    }, [socket, localStream, kslsocket]);
+    }, [socket, localStream,kslsocket]);
 
 
 
@@ -231,25 +260,39 @@ function VideoCall(props) {
 
     //FLASK에게 이미지 전송
     useEffect(() => {
-// 
+
         if(kslsocket === null){
             return
         }
-        //console.log('이미지전송 useEffect 실행됨');
-        if (localStream && countRef.current < 5) {
-// 
+        // if (localStream && countRef.current < 5) {
+        if (localStream && !timerRef.current) {
           timerRef.current = setInterval(() => {
             sendFrame();
-            //console.log('sendFrame 함수 실행 완료'); -> 실행잘됨
           }, 300);
         }
 
-        //플라스크 result
-        if (kslsocket) {
-            kslsocket.on('result', (data) => {
-                console.log("result: ", data)
-            })
-        }
+        // //플라스크 result
+        // if (kslsocket) {
+        //     kslsocket.on('result', (data) => {
+        //         console.log("result: ", data)
+        //         //받은걸 바로 보내기
+        //         // axios.post('/server/ksl/from', {
+        //         //     ksl_recog_word_arr: data,
+        //         // })  
+        //         axios({
+        //             method: 'post',
+        //             url: 'http://3.34.107.64/server/ksl/from',
+        //             data: {"ksl_recog_word_arr": data},
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             },
+        //         })  
+        //         .then((response) => { console.log(response.data); }) 
+        //         .catch(error => {console.error('ksl 에러 : '+error);});
+        //         // setWordArray(data);
+        //     }) 
+        //}
         //플라스크 response back
         // if (kslsocket) {
         //     kslsocket.on('response_back', (data) => {
@@ -258,9 +301,10 @@ function VideoCall(props) {
         // }
         return () => {
           clearInterval(timerRef.current);
-          
+          //새롭게 추가
+          timerRef.current = null;
         };
-      }, [kslsocket,localStream,timerRef]);
+      }, [localStream]);
 
       
     
@@ -281,6 +325,7 @@ function VideoCall(props) {
         //   clearInterval(timerRef.current);
         // }
       };
+
 
 
 
