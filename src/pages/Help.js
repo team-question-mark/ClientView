@@ -4,7 +4,7 @@ import styled from 'styled-components'; // react에 css 바로 사용 라이브�
 import Header from '../components/Header';
 import { SectionsContainer, Section } from 'react-fullpage'; //풀페이지 스크롤 라이브러리
 import HelpModal from '../components/HelpModal';
-
+import HelpModal2 from '../components/HelpModal2';
 
 
 function Help() {
@@ -27,6 +27,7 @@ function Help() {
 
     //모달창 켜고 닫기
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
     const handleModalOpen = () => {
         setIsModalOpen(true);
@@ -34,6 +35,15 @@ function Help() {
 
     const handleModalClose = () => {
         setIsModalOpen(false);
+    };
+
+    const handleSecondModalOpen = () => {
+        setIsModalOpen(false);  // 첫 번째 모달을 닫고
+        setIsSecondModalOpen(true);  // 두 번째 모달을 연다
+    };
+
+    const handleSecondModalClose = () => {
+        setIsSecondModalOpen(false);
     };
 
 
@@ -83,10 +93,22 @@ function Help() {
                                     <img width="256" height="256" src="https://img.icons8.com/windows/256/home.png" alt="home" />
                                 </CreateBox2>
                                 <CreateBox3>
-                                    <HelpModal buttonLabel="방 생성" isOpen={isModalOpen} handleClose={handleModalClose}>
-                                        뱅을 생성할꺼냐?
-                                        <OpenButton>예</OpenButton> <OpenButton>아니오</OpenButton>
-                                    </HelpModal>
+                                    <MainButton onClick={handleModalOpen}>방생성</MainButton>
+
+                                    <HelpModal2 isOpen={isModalOpen} handleClose={handleModalClose}>
+                                        <p>뱅을 생성할꺼냐?</p>
+                                        <OpenButton onClick={handleSecondModalOpen}>예</OpenButton>
+                                        <OpenButton onClick={handleModalClose}>아니오</OpenButton>
+                                    </HelpModal2>
+
+                                    <HelpModal2
+                                        isOpen={isSecondModalOpen}
+                                        handleClose={handleSecondModalClose}
+                                    >
+                                        <p>수화 사용자이십니까?</p>
+                                        <OpenButton onClick={handleSecondModalClose}>예</OpenButton>
+                                        <OpenButton onClick={handleSecondModalClose}>아니오</OpenButton>
+                                    </HelpModal2>
                                 </CreateBox3>
                             </CreateBox1>
                             <ParticipateBox1>

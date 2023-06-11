@@ -52,7 +52,7 @@ function Header() {
           <HeaderLi onClick={goHome}>Home</HeaderLi>
           <HeaderLi onClick={goHelp}>Help</HeaderLi>
           <HeaderLi onClick={goInformation}>Information</HeaderLi>
-          <HeaderLi onClick={goRoom}>대화방확인</HeaderLi>
+          {/* <HeaderLi onClick={goRoom}>대화방확인</HeaderLi> */}
         </HeaderUl>
       </Container>
     </HeaderContainer>

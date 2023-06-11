@@ -63,7 +63,7 @@ function Room() {
                     <DevideBox2>
                         <CodeBox>
 
-                            <div>방 코드 : asdasdasd</div>
+                            <div>방 코드 : {roomId}</div>
 
                         </CodeBox>
                         <TextBox>
@@ -136,6 +136,8 @@ let MainBox = styled.div`  //메인박스
 
 let DevideBox1 = styled.div`//얼굴박스와 채팅박스를 넣을박스1
     display: flex;
+    //justify-content: center;
+    align-items: center;
     width: 100%;
     height: 80%; 
     background-color: white;
