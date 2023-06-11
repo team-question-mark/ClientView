@@ -87,9 +87,20 @@ function Main() {
         navigate('/pages/Room', { state: { roomId: roomId, signUser: signUser } })
     }
 
+    const roomServerApi=process.env.REACT_APP_ROOM_SERVER_API
     // 방 생성
-    const createRoom = () => {
+    const createRoom = (isSignUser) => {
         // 방 생성 api   /room/create
+
+        axios.post(roomServerApi + '/roomCreate')
+        .then((result) => {
+            setRoomId(result.data);
+            setSignUser(isSignUser);
+            //console.log('roomId : ' + roomId);
+        })
+        .catch((error) => {
+            console.error(error)
+        })
 
         // 연결  => roomId와 함께 화상통화 페이지로 이동
 
@@ -97,11 +108,22 @@ function Main() {
 
 
     // 방 입장
-    const enterRoom = (roomId) => {
+    const enterRoom = () => {
         // 방 확인 api   /room/check
-
+        axios.get(roomServerApi + '/roomCheck/'+inputValue)
+        .then((result) => {
+            // console.log(result.data.isRoom);
+            if (!result) {
+                // window.alert('no!')
+            }else{
+                setRoomId(inputValue);
+                console.log(inputValue);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        })
         // 연결  => roomId와 함께 화상통화 페이지로 이동
-
     }
 
 
@@ -190,8 +212,8 @@ function Main() {
                                 handleClose={handleSecondModalClose}
                                >
                                 <p>수화 사용자이십니까?</p>
-                                <OpenButton onClick={test_createRoom1}>예</OpenButton>
-                                <OpenButton onClick={test_createRoom2}>아니오</OpenButton>
+                                <OpenButton onClick={() => createRoom(true)}>예</OpenButton>
+                                <OpenButton onClick={() => createRoom(false)}>아니오</OpenButton>
                             </Modal2>
                         </CreateBox3>
                     </CreateBox1>
