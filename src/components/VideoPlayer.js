@@ -47,7 +47,7 @@ const VideoPlayer = ({videoQueue}) => {
           src={videoQueue[currentVideoIndex]}
           autoPlay
           controls
-          style={{ width: '50%', height: 'auto' }}
+          style={{ width: '300px', height: 'auto' }}
         />
       )}
     </div>

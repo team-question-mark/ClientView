@@ -16,12 +16,12 @@ function Room() {
     const roomId = location.state.roomId;
     const signUser = location.state.signUser;
 
-    const [videoQueue, setVideoQueue] = useState([]);
-    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    // const [videoQueue, setVideoQueue] = useState([]);
+    // const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-    const handleVideoQueueUpdate = (videoQueue) => {
-        setVideoQueue(videoQueue);
-      };
+    // const handleVideoQueueUpdate = (videoQueue) => {
+    //     setVideoQueue(videoQueue);
+    //   };
     
     useEffect(()=> {
         console.log('roomId는 '+roomId);
@@ -65,8 +65,10 @@ function Room() {
                 </HangUpBox1>
                 <MainBox>
                     <DevideBox1>
-                        <VideoCallTest2 roomId={roomId} signUser={signUser} />
-                        <VideoPlayer videoQueue={videoQueue} />
+                        
+                        <VideoCallTest2 roomId={roomId} signUser={signUser}/>
+                        
+                        {/* <VideoPlayer videoQueue={videoQueue}/> */}
                     </DevideBox1>
                     <DevideBox2>
                         <CodeBox>
@@ -76,9 +78,8 @@ function Room() {
                         </CodeBox>
                         <TextBox>
 
-                        <ReactHookSTT onVideoQueueUpdate={handleVideoQueueUpdate} />
-                            <div style={{ margin: "1px" }}>나 : &nbsp;&nbsp;나는 말한다</div>
-                            <div style={{ margin: "1px" }}>상대 : &nbsp;&nbsp;너는 말한다</div>
+                        {/* <ReactHookSTT onVideoQueueUpdate={handleVideoQueueUpdate} /> */}
+                            
 
                         </TextBox>
                     </DevideBox2>
@@ -132,6 +133,7 @@ let MainBox = styled.div`  //메인박스
 let DevideBox1 = styled.div`//얼굴박스와 채팅박스를 넣을박스1
     display: flex;
     //justify-content: center;
+    flex-direction: row;
     align-items: center;
     width: 100%;
     height: 80%; 

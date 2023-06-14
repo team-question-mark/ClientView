@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import useSpeechToText from 'react-hook-speech-to-text';
 import axios from 'axios';
 
-export default function ReactHookSTT({ onVideoQueueUpdate }) {
+export default function ReactHookSTT({ socket,roomId,signUser,onVideoQueueUpdate}) {
     const roomServerApi=process.env.REACT_APP_ROOM_SERVER_API
     const {
         error,
@@ -27,7 +27,9 @@ export default function ReactHookSTT({ onVideoQueueUpdate }) {
           .post(roomServerApi + '/sentenceAnalysis', { sentence: lastResult.transcript })
           .then((response) => {
             // API 요청 성공 시 실행되는 코드
+            console.log(roomId)
             console.log(response.data);
+            socket.emit("ksl_ani",response.data,roomId)
             onVideoQueueUpdate(response.data); // 받은 영상 URL로 videoQueue 상태 업데이트
           })
           .catch((error) => {
@@ -41,7 +43,6 @@ export default function ReactHookSTT({ onVideoQueueUpdate }) {
 
     return (
         <div>
-            <h1>Recording: {isRecording.toString()}</h1>
             <button onClick={isRecording ? stopSpeechToText : startSpeechToText}>
                 {isRecording ? 'Stop Recording' : 'Start Recording'}
             </button>
