@@ -3,13 +3,11 @@ import io from 'socket.io-client';
 
 // Signalling Server url
 const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
-const kslurl = "http://localhost:5000";
-
-
 
 function VideoCall(props) {
 
     const roomId = props.roomId;
+
     // STUN/TURN Server Config
     const rtcConfig = {
         'iceServers': [{
@@ -23,12 +21,11 @@ function VideoCall(props) {
     };
 
     const [socket, setSocket] = useState(null);
-    const [kslsocket, setKslsocket] = useState(null);
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [peerConnection, setPeerConnection] = useState(null);
     // const [isMuted, setIsMuted] = useState(false);
-    
+
 
     // get Local Media Stream  &  connect Socket  &  WebRTC Config
     useEffect(() => {
@@ -36,6 +33,7 @@ function VideoCall(props) {
         // 로그 확인
         console.log('url is : ' + url);
         console.log('roomID is ' + roomId);
+
 
         // get Local Media Stream
         const constraints = { audio: true, video: true };
@@ -54,9 +52,6 @@ function VideoCall(props) {
         
         // WebRTC Config
         setPeerConnection(new RTCPeerConnection(rtcConfig));
-
-        // connect KSLFLASK
-        setKslsocket(io(kslurl));
         
         // unmount
         return () => {
@@ -107,13 +102,7 @@ function VideoCall(props) {
             handleCandidate(candidate);
         });
 
-         //플라스크와 연결되면 콘솔에 찍기
-         kslsocket.on('connect', () => {
-            console.log("FLASK Connected...!", kslsocket)
-        })
-
-
-    }, [socket, localStream, kslsocket]);
+    }, [socket, localStream]);
 
 
     

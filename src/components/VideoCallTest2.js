@@ -1,17 +1,26 @@
 import React, { useState, useEffect,useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+import VideoPlayer from './VideoPlayer';
+import ReactHookSTT from './STT';
 
 
 
 // Signalling Server url
 const url = process.env.REACT_APP_SIGNALLING_SERVER_URL;
 // const kslurl = "http://localhost:5000";
-const kslurl = "http://127.0.0.1:5000";
+const kslurl = process.env.REACT_APP_KSL_SERVER_URL;
 
 
 
-function VideoCall(props) {
+function VideoCallTest2(props) {
+
+    const [videoQueue, setVideoQueue] = useState([]);
+    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+    const handleVideoQueueUpdate = (videoQueue) => {
+        setVideoQueue(videoQueue);
+      };
 
     const roomId = props.roomId;
     const signUser = props.signUser;
@@ -36,9 +45,13 @@ function VideoCall(props) {
     const canvasRef = useRef(null);
     const timerRef = useRef(null);
     const countRef = useRef(0);
+
+
+
+    const [audiotest,setAudioTest] = useState(null);
     // const [isMuted, setIsMuted] = useState(false);
     
-
+    const audioRef = useRef(); // 오디오 참조
     // get Local Media Stream  &  connect Socket  &  WebRTC Config & connect KSLFLASK
     useEffect(() => {
 
@@ -69,20 +82,6 @@ function VideoCall(props) {
         if(signUser){
         setKslsocket(io(kslurl));
         }
-
-
-        //KSl Hub SERVER CONNECT CHECK
-        axios({
-            method: 'post',
-            url: 'http://3.34.107.64/test',
-            data: {"text": "connection"},
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-        })  
-        .then((response) => { console.log("허브서버와 연결됨 아임 테스트: " + response.data); }) 
-        .catch(error => {console.error('에러 : '+error);});
 
         // unmount
         return () => {
@@ -135,24 +134,21 @@ function VideoCall(props) {
             handleCandidate(candidate);
         });
 
+        socket.on('ksl_ani', (list)=>{
+            // 리스트 받은거 큐에 넣어줌.
+            console.log("list"+list)
+            handleVideoQueueUpdate(list)
+        });
 
-        //플라스크 result
-        // if (kslsocket) {
-            kslsocket.on('result', (data) => {
-                console.log("result: ", data)
-                //받은걸 바로 보내기
-                axios({
-                    method: 'post',
-                    url: 'http://3.34.107.64/server/ksl/from',
-                    data: {"ksl_recog_word_arr": data},
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                })  
-                .then((response) => { console.log(response.data); }) 
-                .catch(error => {console.error('ksl 에러 : '+error);});
-            })
+        socket.on('voice', (voice)=>{
+            // s3에 저장된 mp3파일 출력
+            setAudioTest(voice);
+            console.log('voice url is  '+voice)
+            
+            playAudio(voice)
+        });
+
+
      
 
 
@@ -272,33 +268,39 @@ function VideoCall(props) {
         }
 
         // //플라스크 result
-        // if (kslsocket) {
-        //     kslsocket.on('result', (data) => {
-        //         console.log("result: ", data)
-        //         //받은걸 바로 보내기
-        //         // axios.post('/server/ksl/from', {
-        //         //     ksl_recog_word_arr: data,
-        //         // })  
-        //         axios({
-        //             method: 'post',
-        //             url: 'http://3.34.107.64/server/ksl/from',
-        //             data: {"ksl_recog_word_arr": data},
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Content-Type': 'application/json'
-        //             },
-        //         })  
-        //         .then((response) => { console.log(response.data); }) 
-        //         .catch(error => {console.error('ksl 에러 : '+error);});
-        //         // setWordArray(data);
-        //     }) 
-        //}
-        //플라스크 response back
-        // if (kslsocket) {
-        //     kslsocket.on('response_back', (data) => {
-        //         console.log("response_back: ", data)
-        //     })
-        // }
+        if (kslsocket) {
+            kslsocket.on('result', (data) => {
+                console.log("result: ", data)
+                //받은걸 바로 보내기
+                // axios.post('/server/ksl/from', {
+                //     ksl_recog_word_arr: data,
+                // })  
+                axios({
+                    method: 'post',
+                    url: process.env.REACT_APP_HUB_SERVER_URL +'server/ksl/from',
+                    data: {"ksl_recog_word_arr": data},
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })  
+                .then((response) => { console.log(response.data);
+                    if (response.data.speaking_audio) {
+                        socket.emit('voice', response.data.speaking_audio, roomId)
+                        playAudio(response.data.speaking_audio)
+                        console.log("voice로 에밋 보냄 : " + response.data.speaking_audio);
+                        // playAudio(response.data.speaking_audio);
+                    } }) 
+                .catch(error => {console.error('ksl 에러 : '+error);});
+                // setWordArray(data);
+            }) 
+        }
+        // 플라스크 response back
+        if (kslsocket) {
+            kslsocket.on('response_back', (data) => {
+                console.log("response_back: ", data)
+            })
+        }
         return () => {
           clearInterval(timerRef.current);
           //새롭게 추가
@@ -326,7 +328,12 @@ function VideoCall(props) {
         // }
       };
 
-
+   //오디오 재생
+   const playAudio = (audioUrl) => {
+    audioRef.current.src = audioUrl; // 참조를 사용하여 오디오 요소의 소스를 설정합니다.
+    audioRef.current.play(); // 오디오를 재생합니다.
+    console.log( 'audioTest 스테이트 : ' + audiotest);
+  };
 
 
 
@@ -346,8 +353,9 @@ function VideoCall(props) {
 
 
     return (
-        <div>
+        <div style={{display:"flex"}}>
             {localStream && (
+                <div style={{display:"flex",flexdirection:"row"}}>           
                 <video
                     ref={(video) => {
                         if (video && !video.srcObject) {
@@ -356,9 +364,18 @@ function VideoCall(props) {
                     }}
                     autoPlay
                     muted
+                    //style={{width:"50%"}}
                 />
+                <div style={{display:"flex",flexDirection:"column"}}>             
+                <ReactHookSTT socket={socket} roomId={roomId} signUser={signUser}  onVideoQueueUpdate={handleVideoQueueUpdate} />
+                <VideoPlayer videoQueue={videoQueue}/>
+                </div>
+                {/* <ReactHookSTT onVideoQueueUpdate={handleVideoQueueUpdate}/> */}
+                {/* <ReactHookSTT socket={socket} roomId={roomId} onVideoQueueUpdate={handleVideoQueueUpdate} /> */}
+                </div>
             )}
             {remoteStream && (
+                <div>
                 <video
                     ref={(video) => {
                         if (video && !video.srcObject) {
@@ -366,7 +383,9 @@ function VideoCall(props) {
                         }
                     }}
                     autoPlay
+                    style={{width:"auto"}}
                 />
+                </div>
             )}
             {/* <div>
                 <button onClick={handleToggleMute}>
@@ -386,6 +405,7 @@ function VideoCall(props) {
                 height={480}
                 style={{ display: 'none' }}
             /> : <div/>}
+             <audio ref={audioRef} controls style={{ display: 'none' }} />
             {/* <canvas
                 id="videoCanvas"
                 ref={canvasRef}
@@ -399,4 +419,4 @@ function VideoCall(props) {
 
 
 
-export default VideoCall;
+export default VideoCallTest2;

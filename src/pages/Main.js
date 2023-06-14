@@ -127,58 +127,6 @@ function Main() {
     }
 
 
-    // ======== Test
-    const serverUrl = process.env.REACT_APP_ROOM_SERVER_URL;
-    // console.log(serverUrl);
-    // console.log(process.env.REACT_APP_TEST);
-
-
-    const test_createRoom1 = () => {
-        // 방 생성 api   /test/room/create
-        axios.get(serverUrl + '/test/room/create')
-            .then((result) => {
-                const jsonResult = JSON.stringify(result);
-                setSignUser(true);
-                setRoomId(result.data.roomId);
-                // console.log('roomId : ' + roomId);
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
-
-    const test_createRoom2 = () => {
-        // 방 생성 api   /test/room/create
-        axios.get(serverUrl + '/test/room/create')
-            .then((result) => {
-                const jsonResult = JSON.stringify(result);
-                setSignUser(false);
-                setRoomId(result.data.roomId);
-                // console.log('roomId : ' + roomId);
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
-
-
-    const test_enterRoom = () => {
-        // 방 확인 api   /test/room/check
-        axios.get(serverUrl + '/test/room/check', 
-            {params:{roomId: inputValue}})
-            .then((result) => {
-                // console.log(result.data.isRoom);
-                if (!result.data.isRoom) {
-                    // window.alert('no!')
-                }else{
-                    setRoomId(inputValue);
-                    // console.log(roomId);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            })
-    }
 
 
 
@@ -227,7 +175,7 @@ function Main() {
                                 뱅 코드를 입력해라
                                 <input style={{ display: "block", width: "100%", marginTop: "20px", height: "25px", borderWidth: "2px", borderRadius: "5px" }}
                                     type='text' value={inputValue} onChange={handleInputValue}/>
-                                <GoinButton onClick={test_enterRoom} >입장</GoinButton>
+                                <GoinButton onClick={enterRoom} >입장</GoinButton>
                             </Modal>
                         </ParticipateBox3>
                     </ParticipateBox1>
