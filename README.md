@@ -1,79 +1,28 @@
 Node_modules는 push 및 commit 금지
 파일 받은 후 npm install 필수
+# 수어 번역 화상통화 서비스
 
-# Getting Started with Create React App
+## 프로젝트 소개
+수어 사용자와 비사용자 간의 원활한 의사소통을 도울 수 있는 서비스 개발
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 주요기능
+- 실시간 영상통화 기능 제공
+    - WebRTC를 활용한 실시간 미디어 통신구현
+- 수어 통역 기능 제공
+    - 수어 모션을 실시간으로 인식하여 통역
+- 구어를 수어로 변환 기능 제공
+    - 사람이 말한것을 수어애니메이션으로 변환하여 농인에게 제공
+ 
+## 기대효과
+1. 실생활에서의 쌍방향 의사소통을 혁신적으로 가능하게 하는 서비스 개발로, 수어 비수어 사람들 사이의 의사소통 장벽 제거
+2. 클라우드를 통해 실시간 통역기능을 제공하여, 수어 사용자들의 편의성을 극대화하고 통역 대기 시간과 비용 부담 제거
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-### 완성 내용
+## 완성 내용
+- 청인이 말한 내용을 인식하여 밑에 텍스트로 출력해줄 뿐만 아니라 카메라 하단에 수어 애니메이션이 나와 농인이 알아 볼 수 있도록 함
 ![수어애니메이션캡쳐](https://github.com/team-question-mark/ClientView/assets/108380607/5abf9cca-e73c-4bf0-b571-220ff578bd3b)
 
+- 수어 행위자의 수어를 인식하여 단어들을 추출하고 gpt모델을 통하여 자연스러운 문장으로 만든 후 TTS를 만들어 mp3파일을 s3 버킷에 저장후 상대방에게 음성으로 수어 내용 전달
+![수어행위캡쳐](https://github.com/team-question-mark/ClientView/assets/108380607/d274192e-1c76-4e14-97ac-c7df58ce1fde)
 
-
+- 수어 구어 문법 변환 기능
+![문법](https://github.com/team-question-mark/ClientView/assets/108380607/e5ec0198-07c6-44c5-a79a-ca035eb2e927)
